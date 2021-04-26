@@ -7,23 +7,23 @@ namespace AssetsQuery.Scripts
     /// 相对路径数据
     /// </summary>
     [Serializable]
-    internal struct RelativePathData
+    internal struct RelativeDirectoryData
     {
         /// <summary>
         /// 路径
         /// </summary>
-        public string Path;
+        public string directoryPath;
         /// <summary>
         /// 相对路径类型
         /// </summary>
-        public RelativeType Type;
+        public RelativeType relativeType;
     }
 
     [Serializable]
-    internal struct IMGRefQueryData
+    internal struct RefQueryData
     {
-        public RelativePathData PathData;
-        public QueryWhat QueryWhat;
+        public RelativeDirectoryData directoryData;
+        public QueryWhat queryWhat;
     }
     
     /// <summary>
@@ -35,10 +35,10 @@ namespace AssetsQuery.Scripts
         /// <summary>
         /// 图片根目录数据
         /// </summary>
-        public RelativePathData ImgRootData;
+        public RelativeDirectoryData imageRootDirectory;
         /// <summary>
         /// 查询数据
         /// </summary>
-        public IMGRefQueryData[] QueryDatas;
+        public RefQueryData[] queryDatas;
     }
 }

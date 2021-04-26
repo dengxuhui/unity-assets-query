@@ -27,7 +27,7 @@ namespace AssetsQuery.Scripts.window
 
             if (GUILayout.Button("查询未使用的图片"))
             {
-                FuncFindUnusedIMG.Collect();
+                FuncFindUnusedIMG.Start();
             }
             
 
