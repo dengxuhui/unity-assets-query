@@ -35,7 +35,7 @@ namespace AssetsQuery.Scripts
         /// <summary>
         /// 图片根目录数据
         /// </summary>
-        public RelativePathData ImgPathData;
+        public RelativePathData ImgRootData;
         /// <summary>
         /// 查询数据
         /// </summary>

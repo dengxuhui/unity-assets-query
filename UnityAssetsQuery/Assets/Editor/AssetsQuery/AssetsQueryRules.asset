@@ -14,19 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorLanguage: 0
   QueryDatas:
-  - ImgPathData:
-      Path: 
+  - ImgRootData:
+      Path: AssetsPackage/Atlas
       Type: 0
     QueryDatas:
     - PathData:
-        Path: 
+        Path: AssetsPackage/Prefabs
         Type: 0
-      QueryWhat: 0
-    - PathData:
-        Path: 
-        Type: 0
-      QueryWhat: 0
-    - PathData:
-        Path: 
-        Type: 0
-      QueryWhat: 0
+      QueryWhat: 2
