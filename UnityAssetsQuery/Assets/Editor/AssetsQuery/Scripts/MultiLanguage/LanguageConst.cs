@@ -8,7 +8,7 @@ namespace AssetsQuery.Scripts.MultiLanguage
     internal static class LanguageConst
     {
         //语言csv字典
-        public static Dictionary<EditorLanguage, string> LanguageCsvDic = new Dictionary<EditorLanguage, string>()
+        public static readonly Dictionary<EditorLanguage, string> LanguageCsvDic = new Dictionary<EditorLanguage, string>()
         {
             //中文
             {EditorLanguage.Chinese, "Editor/AssetsQuery/Assets/Language/chinese.csv"},
