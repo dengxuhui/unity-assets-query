@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using AssetsQuery.Scripts.MultiLanguage;
 using UnityEditor;
 
 namespace AssetsQuery.Scripts.func
@@ -10,8 +11,6 @@ namespace AssetsQuery.Scripts.func
     /// </summary>
     internal static class FuncRemoveEmptyDir
     {
-        const string title = "Remove Empty Directories";
-        
         public static void Start()
         {
             var rDir = new DirectoryInfo("Assets/");
@@ -21,7 +20,7 @@ namespace AssetsQuery.Scripts.func
 
             if (dis.Count == 0)
             {
-                EditorUtility.DisplayDialog(title, "No Empty Directory", "OK");
+                EditorUtility.DisplayDialog(LanguageMgr.Read("remove_empty_dir_title"), LanguageMgr.Read("msg_no_empty_dir"), "OK");
                 return;
             }
 
@@ -32,7 +31,7 @@ namespace AssetsQuery.Scripts.func
                 sb.AppendLine(index.ToString() + " " + dis[i].FullName);
             }
 
-            if (EditorUtility.DisplayDialog(title, sb.ToString(), "OK", "Cancel"))
+            if (EditorUtility.DisplayDialog(LanguageMgr.Read("remove_empty_dir_title"), sb.ToString(), "OK", "Cancel"))
             {
                 foreach (var target in dis)
                 {
