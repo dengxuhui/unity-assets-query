@@ -39,6 +39,8 @@ namespace AssetsQuery.Scripts.func
                 Debug.LogError($"directory is not exist:{fullDirPath}");
                 return;
             }
+
+            var luaFiles = Directory.GetFiles(fullDirPath, "*.lua", SearchOption.AllDirectories);
         }
 
         private static void CollectFromPrefab(string fullDirPath, ref Dictionary<string, string> usingDic)

@@ -33,7 +33,7 @@ namespace AssetsQuery.Scripts.window
 
             #endregion
         }
-
+ 
         #endregion
     }
 }
