@@ -60,6 +60,7 @@ namespace AssetsQuery.Scripts.tools
             else
             {
                 Debug.LogError("relative type can not identify");
+                return String.Empty;
             }
         }
     }
