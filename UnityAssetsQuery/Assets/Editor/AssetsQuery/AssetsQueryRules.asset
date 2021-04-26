@@ -12,5 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7ebb7c018d49ec83a7df4756a6af15, type: 3}
   m_Name: AssetsQueryRules
   m_EditorClassIdentifier: 
-  EditorLanguage: 1
-  ImageRootDir: 
+  EditorLanguage: 0
+  QueryDatas:
+  - ImgPathData:
+      Path: 
+      Type: 0
+    QueryDatas:
+    - PathData:
+        Path: 
+        Type: 0
+      QueryWhat: 0
+    - PathData:
+        Path: 
+        Type: 0
+      QueryWhat: 0
+    - PathData:
+        Path: 
+        Type: 0
+      QueryWhat: 0

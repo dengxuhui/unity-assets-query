@@ -13,7 +13,8 @@ namespace AssetsQuery.Scripts
         /// 编辑器使用的语言
         /// </summary>
         public EditorLanguage EditorLanguage = EditorLanguage.Chinese;
-        [Header("IMG图片未使用查询工具配置")] public string ImageRootDir = "";
+        [Header("IMG图片未使用查询工具配置")] 
+        public IMGQueryData[] QueryDatas = new IMGQueryData[0];
     }
 
     [CustomEditor(typeof(AssetsQueryRules))]
