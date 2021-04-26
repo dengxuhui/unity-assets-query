@@ -17,7 +17,7 @@ namespace AssetsQuery.Scripts.func
         /// 从xlsx中查询图片引用
         /// </summary>
         /// <param name="fullDirPath"></param>
-        /// <param name="usingList"></param>
+        /// <param name="usingDic"></param>
         private static void CollectFromXlsx(string fullDirPath, ref Dictionary<string, string> usingDic)
         {
             if (!Directory.Exists(fullDirPath))
@@ -31,7 +31,7 @@ namespace AssetsQuery.Scripts.func
         /// 从lua文件中查找图片引用
         /// </summary>
         /// <param name="fullDirPath"></param>
-        /// <param name="usingList"></param>
+        /// <param name="usingDic"></param>
         private static void CollectFromLua(string fullDirPath, ref Dictionary<string, string> usingDic)
         {
             if (!Directory.Exists(fullDirPath))
