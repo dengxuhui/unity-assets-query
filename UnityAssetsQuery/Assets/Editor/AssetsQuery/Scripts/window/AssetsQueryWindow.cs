@@ -1,4 +1,6 @@
+using AssetsQuery.Scripts.func;
 using UnityEditor;
+using UnityEngine;
 
 namespace AssetsQuery.Scripts.window
 {
@@ -21,7 +23,15 @@ namespace AssetsQuery.Scripts.window
 
         private void OnGUI()
         {
+            #region 图片工具
+
+            if (GUILayout.Button("查询未使用的图片"))
+            {
+                FuncFindUnusedIMG.Collect();
+            }
             
+
+            #endregion
         }
 
         #endregion

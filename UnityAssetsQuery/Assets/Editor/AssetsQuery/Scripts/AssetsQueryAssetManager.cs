@@ -6,7 +6,7 @@ namespace AssetsQuery.Scripts
     /// <summary>
     /// 资源查找工具资源管理器
     /// </summary>
-    public static class AssetsQueryAssetManager
+    internal static class AssetsQueryAssetManager
     {
         /// <summary>
         /// 资源查找工具规则
@@ -25,6 +25,15 @@ namespace AssetsQuery.Scripts
         internal static AssetsQueryRules GetRules()
         {
             return Rules;
+        }
+
+        /// <summary>
+        /// 获取编辑器语言
+        /// </summary>
+        /// <returns></returns>
+        internal static EditorLanguage GetEditorLanguage()
+        {
+            return Rules.EditorLanguage;
         }
         
         private static T GetAsset<T>(string path) where T : ScriptableObject

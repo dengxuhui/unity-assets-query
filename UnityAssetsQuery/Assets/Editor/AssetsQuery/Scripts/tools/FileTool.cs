@@ -8,7 +8,7 @@ namespace AssetsQuery.Scripts.tools
     /// <summary>
     /// 文件工具
     /// </summary>
-    public static class FileTool
+    internal static class FileTool
     {
         /// <summary>
         /// 根据全路径创建目录

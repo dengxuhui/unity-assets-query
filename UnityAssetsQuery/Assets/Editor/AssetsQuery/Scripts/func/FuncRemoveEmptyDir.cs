@@ -8,7 +8,7 @@ namespace AssetsQuery.Scripts.func
     /// <summary>
     /// 移除空目录 移除Assets目录下所有空目录
     /// </summary>
-    public static class FuncRemoveEmptyDir
+    internal static class FuncRemoveEmptyDir
     {
         const string title = "Remove Empty Directories";
         
