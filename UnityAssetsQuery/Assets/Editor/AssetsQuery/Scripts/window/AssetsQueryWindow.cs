@@ -1,4 +1,5 @@
 using AssetsQuery.Scripts.func;
+using AssetsQuery.Scripts.MultiLanguage;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,12 +16,13 @@ namespace AssetsQuery.Scripts.window
         [MenuItem("Window/AssetsQuery", false, 0)]
         static void Init()
         {
-            GetWindow(typeof(AssetsQueryWindow));
+            var window = GetWindow(typeof(AssetsQueryWindow));
+            window.titleContent = new GUIContent(LanguageMgr.Read("main_window_title"));
+            window.Focus();
         }
 
 
         #region ui逻辑
-
         private void OnGUI()
         {
             #region 图片工具
@@ -29,8 +31,6 @@ namespace AssetsQuery.Scripts.window
             {
                 FuncFindUnusedIMG.Start();
             }
-            
-
             #endregion
         }
  

@@ -1,3 +1,9 @@
 Save	保存
 remove_empty_dir_title	移除空目录
 msg_no_empty_dir	当前查询目录下没有空目录
+find_unused_progress_title	查询未使用图片
+main_window_title	资源查找器
+img_query_result	图片查询结果
+not_exist_unused_img_dialog_window	恭喜你！！！当前工程不存在冗余图片资源！！	查询资源时没有冗余资源的提示
+toggle_delete	删除
+button_sure_delete	确认删除
