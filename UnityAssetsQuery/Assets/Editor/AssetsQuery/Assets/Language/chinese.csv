@@ -7,3 +7,5 @@ img_query_result	图片查询结果
 not_exist_unused_img_dialog_window	恭喜你！！！当前工程不存在冗余图片资源！！	查询资源时没有冗余资源的提示
 toggle_delete	删除
 button_sure_delete	确认删除
+delete_over_title	删除操作
+delete_over_content	删除成功
