@@ -28,6 +28,7 @@ namespace AssetsQuery.Scripts.func
             {
                 return;
             }
+
             for (var i = 0; i < uiFiles.Length; i++)
             {
                 var filePath = uiFiles[i];
@@ -46,6 +47,10 @@ namespace AssetsQuery.Scripts.func
             }
         }
 
+        /// <summary>
+        /// 搜集所有图片资源，排除白名单中的资源
+        /// </summary>
+        /// <returns></returns>
         private static Dictionary<string, bool> CollectAllIMGAssets()
         {
             var dic = new Dictionary<string, bool>();
@@ -53,27 +58,88 @@ namespace AssetsQuery.Scripts.func
             var rules = AssetsQueryAssetManager.GetRules();
             var iData = rules.imageRootDirectoryData;
             var rootDir = FileTool.GetFullPath(iData.directoryPath, iData.relativeType);
+            rootDir = FileTool.ConvertSlash(rootDir);
             if (!Directory.Exists(rootDir))
             {
                 Debug.LogError($"directory is not exist:{rootDir}");
                 return dic;
             }
 
-            var allFiles = Directory.GetFiles(rootDir);
+            var allFiles = Directory.GetFiles(rootDir, "*", SearchOption.AllDirectories);
             if (allFiles.Length <= 0)
             {
                 return dic;
             }
+
+            var whiteList = rules.imgWhiteList;
+            var fileWhiteList = new List<string>();
+            var dirWhiteList = new List<string>();
+            for (var i = 0; i < whiteList.Length; i++)
+            {
+                var t = whiteList[i];
+                var p = Path.Combine(rootDir, t.path);
+                p = FileTool.ConvertSlash(p);
+                if (t.type == WhiteListType.Directory)
+                {
+                    if (p.LastIndexOf("/") == p.Length - 1)
+                    {
+                        p = p.Remove(p.Length - 1);
+                    }
+                    dirWhiteList.Add(p);
+                }
+                else if (t.type == WhiteListType.File)
+                {
+                    fileWhiteList.Add(p);
+                }
+            }
+
             for (var i = 0; i < allFiles.Length; i++)
             {
-                var path = allFiles[i];
-                ShowProgress($"查询路径:{path}", (float) i / allFiles.Length);
-                var extension = Path.GetExtension(path);
+                var imgPath = allFiles[i];
+                ShowProgress($"查询路径:{imgPath}", (float) i / allFiles.Length);
+                var extension = Path.GetExtension(imgPath);
+                var imgDir = Path.GetDirectoryName(imgPath);
+                if (string.IsNullOrEmpty(imgDir))
+                {
+                    continue;
+                }
+
+                imgPath = FileTool.ConvertSlash(imgPath);
+                imgDir = FileTool.ConvertSlash(imgDir);
+                var valid = true;
+                for (var i1 = 0; i1 < fileWhiteList.Count; i1++)
+                {
+                    if (imgPath == fileWhiteList[i1])
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if (!valid)
+                {
+                    continue;
+                }
+                for (var i1 = 0; i1 < dirWhiteList.Count; i1++)
+                {
+                    if (imgDir.IndexOf(dirWhiteList[i1], StringComparison.Ordinal) >= 0)
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+
+                if (!valid)
+                {
+                    continue;
+                }
+                
+                
                 if (string.Equals(extension, ".png", StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(extension, ".jpg", StringComparison.OrdinalIgnoreCase))
                 {
-                    path = path.Replace(Application.dataPath, "Assets");
-                    var guid = AssetDatabase.AssetPathToGUID(path);
+                    imgPath = imgPath.Replace(Application.dataPath, "Assets");
+                    var guid = AssetDatabase.AssetPathToGUID(imgPath);
                     if (!string.IsNullOrEmpty(guid))
                     {
                         dic.Add(guid, false);
@@ -120,6 +186,7 @@ namespace AssetsQuery.Scripts.func
                     LanguageMgr.Read("not_exist_unused_img_dialog_window"), "OK");
                 return;
             }
+
             IMGUnusedQueryResultWindow.ShowWindow(unusedList);
         }
 
@@ -130,6 +197,7 @@ namespace AssetsQuery.Scripts.func
         {
             ShowProgress("开始..", 0.0f);
             var allImgGuidDic = CollectAllIMGAssets();
+            //从prefab中删除
             FilterFromPrefabs(ref allImgGuidDic);
             HideProgress();
             DisplayResult(ref allImgGuidDic);

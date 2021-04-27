@@ -18,4 +18,20 @@ namespace AssetsQuery.Scripts
         /// </summary>
         public RelativeType relativeType;
     }
+
+    /// <summary>
+    /// 白名单数据
+    /// </summary>
+    [Serializable]
+    internal struct WhiteListData
+    {
+        /// <summary>
+        /// 白名单类型
+        /// </summary>
+        public WhiteListType type;
+        /// <summary>
+        /// 白名单路径
+        /// </summary>
+        public string path;
+    }
 }

@@ -25,6 +25,8 @@ namespace AssetsQuery.Scripts
         /// </summary>
         [Tooltip("设置image 资源的根目录")]
         public RelativeDirectoryData imageRootDirectoryData;
+        [Tooltip("设置图片白名单")]
+        public WhiteListData[] imgWhiteList = new WhiteListData[0];
     }
 
     [CustomEditor(typeof(AssetsQueryRules))]

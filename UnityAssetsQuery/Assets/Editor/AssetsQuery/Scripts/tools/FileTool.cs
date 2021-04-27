@@ -63,6 +63,16 @@ namespace AssetsQuery.Scripts.tools
                 return String.Empty;
             }
         }
+
+        /// <summary>
+        /// 转换斜杠
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string ConvertSlash(string path)
+        {
+            return path.Replace("\\", "/");
+        }
     }
 
     /// <summary>

@@ -14,4 +14,19 @@ namespace AssetsQuery.Scripts
         /// </summary>
         English,
     }
+
+    /// <summary>
+    /// 白名单类型
+    /// </summary>
+    internal enum WhiteListType
+    {
+        /// <summary>
+        /// 目录白名单 
+        /// </summary>
+        Directory,
+        /// <summary>
+        /// 文件白名单
+        /// </summary>
+        File,
+    }
 }
