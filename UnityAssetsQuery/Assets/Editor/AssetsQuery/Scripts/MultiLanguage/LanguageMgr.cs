@@ -24,7 +24,7 @@ namespace AssetsQuery.Scripts.MultiLanguage
         static LanguageMgr()
         {
             var rule = AssetsQueryAssetManager.GetRules();
-            _usingLang = rule.EditorLanguage;
+            _usingLang = rule.editorLanguage;
             RefreshLangDic();
         }
 

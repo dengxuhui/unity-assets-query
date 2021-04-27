@@ -12,13 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a7ebb7c018d49ec83a7df4756a6af15, type: 3}
   m_Name: AssetsQueryRules
   m_EditorClassIdentifier: 
-  EditorLanguage: 0
-  QueryDatas:
-  - imageRootDirectory:
-      directoryPath: AssetsPackage/Atlas
-      relativeType: 0
-    queryDatas:
-    - directoryData:
-        directoryPath: AssetsPackage/Prefabs
-        relativeType: 0
-      queryWhat: 2
+  editorLanguage: 0
+  prefabRootDirectoryData:
+    directoryPath: AssetsPackage/Prefabs
+    relativeType: 0
+  imageRootDirectoryData:
+    directoryPath: AssetsPackage/Atlas
+    relativeType: 0

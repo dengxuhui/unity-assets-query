@@ -12,9 +12,19 @@ namespace AssetsQuery.Scripts
         /// <summary>
         /// 编辑器使用的语言
         /// </summary>
-        public EditorLanguage EditorLanguage = EditorLanguage.Chinese;
-        [Header("IMG图片未使用查询工具配置")] 
-        public IMGQueryData[] QueryDatas = new IMGQueryData[0];
+        public EditorLanguage editorLanguage = EditorLanguage.Chinese;
+
+        /// <summary>
+        /// prefab根目录
+        /// </summary>
+        [Header("图片资源查询配置")]
+        [Tooltip("设置UI prefab的根目录")]
+        public RelativeDirectoryData prefabRootDirectoryData;
+        /// <summary>
+        /// 图片根目录
+        /// </summary>
+        [Tooltip("设置image 资源的根目录")]
+        public RelativeDirectoryData imageRootDirectoryData;
     }
 
     [CustomEditor(typeof(AssetsQueryRules))]

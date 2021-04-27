@@ -33,7 +33,7 @@ namespace AssetsQuery.Scripts
         /// <returns></returns>
         internal static EditorLanguage GetEditorLanguage()
         {
-            return Rules.EditorLanguage;
+            return Rules.editorLanguage;
         }
         
         private static T GetAsset<T>(string path) where T : ScriptableObject
