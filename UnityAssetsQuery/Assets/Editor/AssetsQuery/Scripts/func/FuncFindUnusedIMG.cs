@@ -47,6 +47,24 @@ namespace AssetsQuery.Scripts.func
             }
         }
 
+        
+        /// <summary>
+        /// 从运行时监听器过滤数据
+        /// </summary>
+        /// <param name="allImgGuidDic"></param>
+        private static void FilterFromMonitorDatas(ref Dictionary<string, bool> allImgGuidDic)
+        {
+            var cloneDic = new Dictionary<string, bool>(allImgGuidDic);
+            var strData = EditorPrefs.GetString(AssetsQueryGlobalConst.ImageUseMonitorSaveKey);
+            if (string.IsNullOrEmpty(strData))
+            {
+                return;
+            }
+            //guid存储池
+            var saveArray = strData.Split(',');
+            Debug.Log("save array:" + strData);
+        }
+
         /// <summary>
         /// 搜集所有图片资源，排除白名单中的资源
         /// </summary>
@@ -85,6 +103,7 @@ namespace AssetsQuery.Scripts.func
                     {
                         p = p.Remove(p.Length - 1);
                     }
+
                     dirWhiteList.Add(p);
                 }
                 else if (t.type == WhiteListType.File)
@@ -120,6 +139,7 @@ namespace AssetsQuery.Scripts.func
                 {
                     continue;
                 }
+
                 for (var i1 = 0; i1 < dirWhiteList.Count; i1++)
                 {
                     if (imgDir.IndexOf(dirWhiteList[i1], StringComparison.Ordinal) >= 0)
@@ -133,8 +153,8 @@ namespace AssetsQuery.Scripts.func
                 {
                     continue;
                 }
-                
-                
+
+
                 if (string.Equals(extension, ".png", StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(extension, ".jpg", StringComparison.OrdinalIgnoreCase))
                 {
@@ -199,6 +219,7 @@ namespace AssetsQuery.Scripts.func
             var allImgGuidDic = CollectAllIMGAssets();
             //从prefab中删除
             FilterFromPrefabs(ref allImgGuidDic);
+            FilterFromMonitorDatas(ref allImgGuidDic);
             HideProgress();
             DisplayResult(ref allImgGuidDic);
         }

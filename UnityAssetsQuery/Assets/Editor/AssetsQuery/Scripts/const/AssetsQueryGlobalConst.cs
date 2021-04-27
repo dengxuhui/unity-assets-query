@@ -5,6 +5,9 @@ namespace AssetsQuery.Scripts
     /// </summary>
     internal static class AssetsQueryGlobalConst
     {
-        
+        /// <summary>
+        /// 存储key
+        /// </summary>
+        public static readonly string ImageUseMonitorSaveKey = "#key#asset_query_image_use_monitor";
     }
 }
