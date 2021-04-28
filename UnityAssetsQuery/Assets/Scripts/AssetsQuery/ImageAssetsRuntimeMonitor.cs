@@ -15,11 +15,35 @@ namespace AssetsQuery
         /// </summary>
         private static readonly string ImageUseMonitorSaveKey = "#key#asset_query_image_use_monitor";
 
-        private Dictionary<string, bool> _runtimeImagePathRecords;
+        private Dictionary<string, bool> _runtimePathRecords;
 
         private void Awake()
         {
-            _runtimeImagePathRecords = new Dictionary<string, bool>();
+            _runtimePathRecords = new Dictionary<string, bool>();
+            var strSave = EditorPrefs.GetString(ImageUseMonitorSaveKey);
+            if (!string.IsNullOrEmpty(strSave))
+            {
+                var guidArray = strSave.Split(',');
+                if (guidArray.Length > 0)
+                {
+                    for (var i = 0; i < guidArray.Length; i++)
+                    {
+                        if (string.IsNullOrEmpty(guidArray[i]))
+                        {
+                            continue;
+                        }
+
+                        var path = AssetDatabase.GUIDToAssetPath(guidArray[i]);
+                        if (string.IsNullOrEmpty(path) || _runtimePathRecords.ContainsKey(path))
+                        {
+                            continue;
+                        }
+
+                        _runtimePathRecords.Add(path, true);
+                    }
+                }
+            }
+
             DontDestroyOnLoad(this);
         }
 
@@ -28,30 +52,31 @@ namespace AssetsQuery
             InvokeRepeating(nameof(CheckSceneTree), 1.0f, 1.0f);
         }
 
-        private void CheckGameObject(GameObject gameObject)
+        private void CheckGameObject(GameObject obj)
         {
-            if (gameObject == null)
+            if (obj == null)
             {
                 return;
             }
-            var imgArray = gameObject.GetComponentsInChildren<Image>();
+
+            var imgArray = obj.GetComponentsInChildren<Image>();
             for (var i2 = 0; i2 < imgArray.Length; i2++)
             {
                 var img = imgArray[i2];
                 if (img.sprite == null) continue;
                 var path = AssetDatabase.GetAssetPath(img.sprite);
-                if (string.IsNullOrEmpty(path) || _runtimeImagePathRecords.ContainsKey(path)) continue;
-                _runtimeImagePathRecords.Add(path, true);
+                if (string.IsNullOrEmpty(path) || _runtimePathRecords.ContainsKey(path)) continue;
+                _runtimePathRecords.Add(path, true);
             }
 
-            var rawArray = gameObject.GetComponentsInChildren<RawImage>();
+            var rawArray = obj.GetComponentsInChildren<RawImage>();
             for (var i2 = 0; i2 < rawArray.Length; i2++)
             {
                 var img = rawArray[i2];
                 if (img.texture == null) continue;
                 var path = AssetDatabase.GetAssetPath(img.texture);
-                if (string.IsNullOrEmpty(path) || _runtimeImagePathRecords.ContainsKey(path)) continue;
-                _runtimeImagePathRecords.Add(path, true);
+                if (string.IsNullOrEmpty(path) || _runtimePathRecords.ContainsKey(path)) continue;
+                _runtimePathRecords.Add(path, true);
             }
         }
 
@@ -63,7 +88,7 @@ namespace AssetsQuery
             {
                 CheckGameObject(activeObjArray[i]);
             }
-            
+
             var dontObjArray = this.gameObject.scene.GetRootGameObjects();
             for (int i = 0; i < dontObjArray.Length; i++)
             {
@@ -73,16 +98,20 @@ namespace AssetsQuery
 
         private void OnApplicationQuit()
         {
-            if (_runtimeImagePathRecords.Count <= 0)
+            if (_runtimePathRecords.Count <= 0)
             {
                 return;
             }
 
             var sb = new StringBuilder();
-            foreach (var kv in _runtimeImagePathRecords)
+            foreach (var kv in _runtimePathRecords)
             {
-                sb.Append(kv.Key);
-                sb.Append(",");
+                var guid = AssetDatabase.AssetPathToGUID(kv.Key);
+                if (!string.IsNullOrEmpty(guid))
+                {
+                    sb.Append(guid);
+                    sb.Append(",");
+                }
             }
 
             var saveStr = sb.ToString();

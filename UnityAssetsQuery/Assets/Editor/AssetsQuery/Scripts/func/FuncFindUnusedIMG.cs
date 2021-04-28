@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using AssetsQuery.Scripts.MultiLanguage;
 using AssetsQuery.Scripts.tools;
 using AssetsQuery.Scripts.window;
@@ -22,6 +23,12 @@ namespace AssetsQuery.Scripts.func
             var rules = AssetsQueryAssetManager.GetRules();
             var rootDir = FileTool.GetFullPath(rules.prefabRootDirectoryData.directoryPath,
                 rules.prefabRootDirectoryData.relativeType);
+            if (!Directory.Exists(rootDir))
+            {
+                Debug.LogError($"directory is not exist:{rootDir}");
+                return;
+            }
+
             var uiFiles = Directory.GetFiles(rootDir, "*.prefab", SearchOption.AllDirectories);
             var cloneDic = new Dictionary<string, bool>(allImgGuidDic);
             if (uiFiles.Length <= 0)
@@ -47,7 +54,7 @@ namespace AssetsQuery.Scripts.func
             }
         }
 
-        
+
         /// <summary>
         /// 从运行时监听器过滤数据
         /// </summary>
@@ -60,9 +67,26 @@ namespace AssetsQuery.Scripts.func
             {
                 return;
             }
+
+            ShowProgress("查询资源监视器缓存数据", 0.0f);
             //guid存储池
-            var saveArray = strData.Split(',');
-            Debug.Log("save array:" + strData);
+            var pathArray = strData.Split(',');
+            if (pathArray.Length <= 0)
+            {
+                return;
+            }
+            for (var i = 0; i < pathArray.Length; i++)
+            {
+                if (string.IsNullOrEmpty(pathArray[i]))
+                {
+                    continue;
+                }
+                ShowProgress($"Guid:{pathArray[i]}", i / pathArray.Length);
+                if (cloneDic.ContainsKey(pathArray[i]))
+                {
+                    allImgGuidDic[pathArray[i]] = true;
+                }
+            }
         }
 
         /// <summary>
@@ -217,9 +241,9 @@ namespace AssetsQuery.Scripts.func
         {
             ShowProgress("开始..", 0.0f);
             var allImgGuidDic = CollectAllIMGAssets();
+            FilterFromMonitorDatas(ref allImgGuidDic);
             //从prefab中删除
             FilterFromPrefabs(ref allImgGuidDic);
-            FilterFromMonitorDatas(ref allImgGuidDic);
             HideProgress();
             DisplayResult(ref allImgGuidDic);
         }

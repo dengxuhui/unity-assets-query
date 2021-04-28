@@ -23,17 +23,24 @@ namespace AssetsQuery.Scripts.window
 
 
         #region ui逻辑
+
         private void OnGUI()
         {
             #region 图片工具
 
+            if (GUILayout.Button(LanguageMgr.Read("btn_text_clear_cache")))
+            {
+                EditorPrefs.DeleteKey(AssetsQueryGlobalConst.ImageUseMonitorSaveKey);
+                EditorUtility.DisplayDialog("清除缓存", "清除缓存成功", "OK");
+            }
             if (GUILayout.Button("查询未使用的图片"))
             {
                 FuncFindUnusedIMG.Start();
             }
+
             #endregion
         }
- 
+
         #endregion
     }
 }

@@ -50,6 +50,7 @@ namespace AssetsQuery.Scripts.window
                 return;
             }
 
+            EditorGUILayout.LabelField(LanguageMgr.Read("query_image_result_title"));
             m_scrollPos = EditorGUILayout.BeginScrollView(m_scrollPos);
             for (var i = 0; i < m_guidList.Count; i++)
             {
