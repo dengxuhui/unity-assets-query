@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Collections.Generic;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,13 +10,17 @@ namespace AssetsQuery
 {
     public class ImageAssetsRuntimeMonitor : MonoBehaviour
     {
-        private Dictionary<int, bool> _runtimeRecords;
-        private Dictionary<string, bool> _texturePathDic;
+        /// <summary>
+        /// 存储key
+        /// </summary>
+        private static readonly string ImageUseMonitorSaveKey = "#key#asset_query_image_use_monitor";
+
+        private Dictionary<string, bool> _runtimeImagePathRecords;
 
         private void Awake()
         {
-            _runtimeRecords = new Dictionary<int, bool>();
-            _texturePathDic = new Dictionary<string, bool>();
+            _runtimeImagePathRecords = new Dictionary<string, bool>();
+            DontDestroyOnLoad(this);
         }
 
         private void Start()
@@ -25,41 +30,52 @@ namespace AssetsQuery
 
         private void CheckSceneTree()
         {
-            var scene = SceneManager.GetActiveScene();
-            var rootObjArray = scene.GetRootGameObjects();
-            for (var i = 0; i < rootObjArray.Length; i++)
+            var sceneCount = SceneManager.sceneCount;
+            for (int i = 0; i < sceneCount; i++)
             {
-                var root = rootObjArray[i];
-                var imgChildren = root.GetComponentsInChildren<Image>();
-                for (var i1 = 0; i1 < imgChildren.Length; i1++)
+                var tScene = SceneManager.GetSceneAt(i);
+                var objArray = tScene.GetRootGameObjects();
+                for (var i1 = 0; i1 < objArray.Length; i1++)
                 {
-                    var img = imgChildren[i1];
-                    if (_runtimeRecords.ContainsKey(img.GetInstanceID())) continue;
-                    _runtimeRecords.Add(img.GetInstanceID(), true);
-                    var sprite = img.sprite;
-                    if (sprite == null) continue;
-                    var path = AssetDatabase.GetAssetPath(sprite);
-                    if (string.IsNullOrEmpty(path) || _texturePathDic.ContainsKey(path)) continue;
-                    _texturePathDic.Add(path, true);
-                }
+                    var imgArray = objArray[i1].GetComponentsInChildren<Image>();
+                    for (var i2 = 0; i2 < imgArray.Length; i2++)
+                    {
+                        var img = imgArray[i2];
+                        if (img.sprite == null) continue;
+                        var path = AssetDatabase.GetAssetPath(img.sprite);
+                        if (string.IsNullOrEmpty(path) || _runtimeImagePathRecords.ContainsKey(path)) continue;
+                        _runtimeImagePathRecords.Add(path, true);
+                    }
 
-                var rawChildren = root.GetComponentsInChildren<RawImage>();
-                for (var i1 = 0; i1 < rawChildren.Length; i1++)
-                {
-                    var raw = rawChildren[i1];
-                    if (_runtimeRecords.ContainsKey(raw.GetInstanceID())) continue;
-                    _runtimeRecords.Add(raw.GetInstanceID(), true);
-                    var texture = raw.texture;
-                    if (texture == null) continue;
-                    var path = AssetDatabase.GetAssetPath(texture);
-                    if (string.IsNullOrEmpty(path) || _texturePathDic.ContainsKey(path)) continue;
-                    _texturePathDic.Add(path, true);
+                    var rawArray = objArray[i].GetComponentsInChildren<RawImage>();
+                    for (var i2 = 0; i2 < rawArray.Length; i2++)
+                    {
+                        var img = rawArray[i2];
+                        if (img.texture == null) continue;
+                        var path = AssetDatabase.GetAssetPath(img.texture);
+                        if (string.IsNullOrEmpty(path) || _runtimeImagePathRecords.ContainsKey(path)) continue;
+                        _runtimeImagePathRecords.Add(path, true);
+                    }
                 }
             }
         }
 
         private void OnApplicationQuit()
         {
+            if (_runtimeImagePathRecords.Count <= 0)
+            {
+                return;
+            }
+
+            var sb = new StringBuilder();
+            foreach (var kv in _runtimeImagePathRecords)
+            {
+                sb.Append(kv.Key);
+                sb.Append(",");
+            }
+
+            var saveStr = sb.ToString();
+            EditorPrefs.SetString(ImageUseMonitorSaveKey, saveStr);
         }
     }
 }
