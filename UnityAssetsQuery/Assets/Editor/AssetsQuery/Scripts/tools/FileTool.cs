@@ -41,6 +41,7 @@ namespace AssetsQuery.Scripts.tools
         /// 获取全路径
         /// </summary>
         /// <param name="relativePath"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         public static string GetFullPath(string relativePath,RelativeType type = RelativeType.Assets)
         {

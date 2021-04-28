@@ -9,3 +9,11 @@ toggle_delete	删除
 button_sure_delete	确认删除
 delete_over_title	删除操作
 delete_over_content	删除成功
+btn_text_clear_cache	清除缓存
+clear_cache_desc	说明：清除运行时采集到的图片使用数据(ImageAssetsRuntimeMonitor.cs)
+query_image_desc	说明：查询当前工程中未使用的图片，根据Prefab引用及Monitor采集到的数据计算
+check_image_white_desc	说明：查看当前图片白名单，白名单只展示File类型，不展示Directory类型白名单。
+check_image_white_func_desc	功能包括：查看，移除白名单。
+btn_check_white_list	查看白名单
+white_list_window_title	图片资源白名单
+remove_from_white_list	移除

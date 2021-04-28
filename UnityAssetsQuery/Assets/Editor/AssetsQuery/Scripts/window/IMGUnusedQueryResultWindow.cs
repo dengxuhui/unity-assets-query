@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AssetsQuery.Scripts.MultiLanguage;
+using AssetsQuery.Scripts.tools;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,9 +9,9 @@ using UnityEngine;
 
 namespace AssetsQuery.Scripts.window
 {
-    public class IMGUnusedQueryResultWindow : EditorWindow
+    internal class IMGUnusedQueryResultWindow : EditorWindow
     {
-        public static void ShowWindow(List<string> unusedGuidList)
+        internal static void ShowWindow(List<string> unusedGuidList)
         {
             if (unusedGuidList == null || unusedGuidList.Count <= 0)
             {
@@ -18,12 +19,6 @@ namespace AssetsQuery.Scripts.window
             }
 
             m_guidList = unusedGuidList;
-            m_guidDeleteFlag = new List<bool>(m_guidList.Count);
-            for (var i = 0; i < m_guidList.Count; i++)
-            {
-                m_guidDeleteFlag.Add(true);
-            }
-
             var window = GetWindow<IMGUnusedQueryResultWindow>();
             window.titleContent = new GUIContent(LanguageMgr.Read("img_query_result"));
             window.Focus();
@@ -32,19 +27,13 @@ namespace AssetsQuery.Scripts.window
         #region window字段
 
         private static List<string> m_guidList;
-
-        /// <summary>
-        /// 删除标志位
-        /// </summary>
-        private static List<bool> m_guidDeleteFlag;
-
         private Vector2 m_scrollPos = Vector2.zero;
 
         #endregion
 
         private void OnGUI()
         {
-            if (m_guidList == null || m_guidDeleteFlag == null || m_guidList.Count != m_guidDeleteFlag.Count)
+            if (m_guidList == null)
             {
                 Close();
                 return;
@@ -63,8 +52,21 @@ namespace AssetsQuery.Scripts.window
                 var asset = AssetDatabase.LoadAssetAtPath<Texture>(path);
                 if (asset == null) continue;
                 GUILayout.BeginHorizontal();
-                m_guidDeleteFlag[i] = EditorGUILayout.ToggleLeft(LanguageMgr.Read("toggle_delete"), m_guidDeleteFlag[i],
-                    GUILayout.Width(80f));
+                if (GUILayout.Button("取消删除"))
+                {
+                    m_guidList.RemoveAt(i);
+                    break;
+                }
+
+                if (GUILayout.Button("添加至白名单"))
+                {
+                    if (AssetQueryDataTool.AddImageFileToWhiteListByPath(path))
+                    {
+                        m_guidList.RemoveAt(i);
+                        break;
+                    }
+                }
+
                 EditorGUILayout.ObjectField("", asset, typeof(TextAsset), false);
                 GUILayout.EndHorizontal();
             }
@@ -82,20 +84,20 @@ namespace AssetsQuery.Scripts.window
         /// </summary>
         private void DoDeleteOperate()
         {
+            if (m_guidList == null || m_guidList.Count <= 0)
+            {
+                return;
+            }
+
             for (var i = 0; i < m_guidList.Count; i++)
             {
                 var guid = m_guidList[i];
-                var delete = m_guidDeleteFlag[i];
-                if (delete)
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                if (!string.IsNullOrEmpty(path))
                 {
-                    var path = AssetDatabase.GUIDToAssetPath(guid);
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        AssetDatabase.DeleteAsset(path);
-                        m_guidList.RemoveAt(i);
-                        m_guidDeleteFlag.RemoveAt(i);
-                        i--;
-                    }
+                    AssetDatabase.DeleteAsset(path);
+                    m_guidList.RemoveAt(i);
+                    i--;
                 }
             }
 

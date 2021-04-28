@@ -19,8 +19,4 @@ MonoBehaviour:
   imageRootDirectoryData:
     directoryPath: AssetsPackage/Atlas
     relativeType: 0
-  imgWhiteList:
-  - type: 0
-    path: WhiteListDir
-  - type: 1
-    path: IMG_WhiteListFile.png
+  imgWhiteList: []

@@ -1,4 +1,5 @@
 using AssetsQuery.Scripts.MultiLanguage;
+using AssetsQuery.Scripts.tools;
 using UnityEditor;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ namespace AssetsQuery.Scripts
             {
                 if (GUI.changed)
                 {
+                    AssetQueryDataTool.OrganizeIMGWhiteList();
                     AssetDatabase.SaveAssets();
                 }
             }
