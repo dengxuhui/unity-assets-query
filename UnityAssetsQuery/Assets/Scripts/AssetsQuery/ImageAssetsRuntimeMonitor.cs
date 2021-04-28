@@ -28,35 +28,46 @@ namespace AssetsQuery
             InvokeRepeating(nameof(CheckSceneTree), 1.0f, 1.0f);
         }
 
+        private void CheckGameObject(GameObject gameObject)
+        {
+            if (gameObject == null)
+            {
+                return;
+            }
+            var imgArray = gameObject.GetComponentsInChildren<Image>();
+            for (var i2 = 0; i2 < imgArray.Length; i2++)
+            {
+                var img = imgArray[i2];
+                if (img.sprite == null) continue;
+                var path = AssetDatabase.GetAssetPath(img.sprite);
+                if (string.IsNullOrEmpty(path) || _runtimeImagePathRecords.ContainsKey(path)) continue;
+                _runtimeImagePathRecords.Add(path, true);
+            }
+
+            var rawArray = gameObject.GetComponentsInChildren<RawImage>();
+            for (var i2 = 0; i2 < rawArray.Length; i2++)
+            {
+                var img = rawArray[i2];
+                if (img.texture == null) continue;
+                var path = AssetDatabase.GetAssetPath(img.texture);
+                if (string.IsNullOrEmpty(path) || _runtimeImagePathRecords.ContainsKey(path)) continue;
+                _runtimeImagePathRecords.Add(path, true);
+            }
+        }
+
         private void CheckSceneTree()
         {
-            var sceneCount = SceneManager.sceneCount;
-            for (int i = 0; i < sceneCount; i++)
+            var activeScene = SceneManager.GetActiveScene();
+            var activeObjArray = activeScene.GetRootGameObjects();
+            for (var i = 0; i < activeObjArray.Length; i++)
             {
-                var tScene = SceneManager.GetSceneAt(i);
-                var objArray = tScene.GetRootGameObjects();
-                for (var i1 = 0; i1 < objArray.Length; i1++)
-                {
-                    var imgArray = objArray[i1].GetComponentsInChildren<Image>();
-                    for (var i2 = 0; i2 < imgArray.Length; i2++)
-                    {
-                        var img = imgArray[i2];
-                        if (img.sprite == null) continue;
-                        var path = AssetDatabase.GetAssetPath(img.sprite);
-                        if (string.IsNullOrEmpty(path) || _runtimeImagePathRecords.ContainsKey(path)) continue;
-                        _runtimeImagePathRecords.Add(path, true);
-                    }
-
-                    var rawArray = objArray[i].GetComponentsInChildren<RawImage>();
-                    for (var i2 = 0; i2 < rawArray.Length; i2++)
-                    {
-                        var img = rawArray[i2];
-                        if (img.texture == null) continue;
-                        var path = AssetDatabase.GetAssetPath(img.texture);
-                        if (string.IsNullOrEmpty(path) || _runtimeImagePathRecords.ContainsKey(path)) continue;
-                        _runtimeImagePathRecords.Add(path, true);
-                    }
-                }
+                CheckGameObject(activeObjArray[i]);
+            }
+            
+            var dontObjArray = this.gameObject.scene.GetRootGameObjects();
+            for (int i = 0; i < dontObjArray.Length; i++)
+            {
+                CheckGameObject(dontObjArray[i]);
             }
         }
 
